@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scientific Calculator</title>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #282c34;
+        color: #ccc;
+        font-family: Arial, sans-serif;
+    }
+    .calculator {
+        width: 340px;
+        padding: 20px;
+        background: #1e2128;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .output {
+        width: 100%;
+        height: 50px;
+        background: #333840;
+        color: white;
+        font-size: 24px;
+        border: none;
+        padding: 0 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: right;
+    }
+    .button-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    button {
+        width: 60px;
+        height: 40px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4b515d;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background-color: #626971;
+    }
+</style>
+</head>
+<body>
+<div class="calculator">
+    <input type="text" class="output" id="result" readonly>
+    <div class="button-row">
+        <button onclick="clearScreen()">C</button>
+        <button onclick="input('sqrt')">√</button>
+        <button onclick="input('^')">^</button>
+        <button onclick="input('/')">/</button>
+    </div>
+    <div class="button-row">
+        <button onclick="input('7')">7</button>
+        <button onclick="input('8')">8</button>
+        <button onclick="input('9')">9</button>
+        <button onclick="input('*')">*</button>
+    </div>
+    <div class="button-row">
+        <button onclick="input('4')">4</button>
+        <button onclick="input('5')">5</button>
+        <button onclick="input('6')">6</button>
+        <button onclick="input('-')">-</button>
+    </div>
+    <div class="button-row">
+        <button onclick="input('1')">1</button>
+        <button onclick="input('2')">2</button>
+        <button onclick="input('3')">3</button>
+        <button onclick="input('+')">+</button>
+    </div>
+    <div class="button-row">
+        <button onclick="input('0')">0</button>
+        <button onclick="input('.')">.</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="input('sin')">sin</button>
+    </div>
+</div>
+<script>
+    let expression = '';
+
+    function input(value) {
+        if (value === 'sqrt' || value === 'sin') {
+            expression += value + '(';
+        } else {
+            expression += value;
+        }
+        document.getElementById('result').value = expression;
+    }
+
+    function calculate() {
+        try {
+            let output = expression;
+            if (output.includes('^')) {
+                const base = output.substring(0, output.indexOf('^'));
+                const exponent = output.substring(output.indexOf('^') + 1);
+                output = `Math.pow(${base}, ${exponent})`;
+            }
+            if (output.includes('sqrt')) {
+                output = output.replace('sqrt', 'Math.sqrt');
+            }
+            if (output.includes('sin')) {
+                output = output.replace('sin', 'Math.sin');
+            }
+            output = eval(output);
+            document.getElementById('result').value = output;
+            expression = output;
+        } catch (e) {
+            document.getElementById('result').value = 'Error';
+            expression = '';
+        }
+    }
+
+    function clearScreen() {
+        document.getElementById('result').value = '';
+        expression = '';
+    }
+</script>
+</body>
+</html>
